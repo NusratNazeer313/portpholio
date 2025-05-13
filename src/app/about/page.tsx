@@ -49,8 +49,8 @@ const About = () => {
           </p>
 
           <p className="mt-2 text-gray-700 text-sm md:text-base">
-            Hi, I'm Nusrat! A Frontend Developer with expertise in React.js,
-            Next.js, and React Native. I specialize in building modern,
+            Hi, I m Nusrat! A Frontend Developer with expertise in React.js
+            Next.js and React Native. I specialize in building modern
             high-performance web and mobile applications with a focus on
             seamless user experiences.
           </p>

@@ -29,7 +29,7 @@ const Projects = () => {
   return (
     <div className="w-full h-auto flex flex-col items-center justify-center pb-20">
       <h1 className="text-2xl font-bold text-black flex items-center justify-center pt-20">
-        Projects
+        React js Projects
       </h1>
       <div className="flex justify-center items-center">
         <div className="w-4 h-4 bg-gray-600 rounded-[50%]" />
