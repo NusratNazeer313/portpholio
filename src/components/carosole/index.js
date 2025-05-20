@@ -33,7 +33,7 @@ const Awards = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-slate-100">
+        <div className="flex flex-col items-center justify-center h-screen ">
             <h1 className="text-black font-bold text-4xl mb-8">Awards</h1>
             <div className="relative w-full flex justify-center items-center h-80">
                 {education.map((item, index) => (

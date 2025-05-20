@@ -1,9 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-// import ImageSession from "@/components/image";
-// import ParticlesBackground from "@/components/background/page";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+// import dynamic from "next/dynamic";
+// const Spline = dynamic(() => import("@splinetool/react-spline"), {
+//   ssr: false,
+// });
+
 const Introduction = () => {
   const role = "React.js, React Native, Next.js Developer";
   const [displayText, setDisplayText] = useState("");
@@ -41,7 +43,7 @@ const Introduction = () => {
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 30 }}
         transition={{ duration: 1, delay: 1 }}
-        className=" rounded-lg w-full pl-20  pb-32 relative z-10"
+        className=" rounded-lg w-1/2 pl-20  pb-32 relative z-10"
       >
         <h1 className="text-black font-extrabold text-4xl">Hello! It is me</h1>
         <h1 className="text-orange-500 font-extrabold text-5xl">
@@ -65,12 +67,9 @@ const Introduction = () => {
           </button>
         </a>
       </motion.div>
-
-      <DotLottieReact
-        src="https://lottie.host/2297cea6-f45e-44dd-94f4-ded3d0af2d32/EhtfWq39dr.lottie"
-        loop
-        autoplay
-      />
+      <div className="w-1/2">
+        {/* <Spline scene="https://my.spline.design/cutecomputerfollowcursor-PDP9T9sUbbc6EvW1Uf46MTZp/" /> */}
+      </div>
     </div>
   );
 };

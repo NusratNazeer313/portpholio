@@ -5,9 +5,10 @@ import About from "./about/page";
 import Skils from "@/components/skills";
 import Certificates from "./certificates/pages";
 // import Education from "./education/page";
-// import Awards from "../components/carosole/index";
+import Awards from "../components/carosole/index";
 import Contact from "./contact/page";
 import Projects from "./projects/page";
+import ReactNAtiveProjects from "./reactNativeProjects/page";
 
 export default function Home() {
   return (
@@ -16,10 +17,11 @@ export default function Home() {
       <Introduction />
       <About />
       <Skils />
-      <Certificates />
       <Projects />
-      {/* <Awards />
-      <Education /> */}
+      <ReactNAtiveProjects />
+      <Certificates />
+      <Awards />
+      {/* <Education /> */}
       <Contact />
     </main>
   );

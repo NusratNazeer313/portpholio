@@ -21,8 +21,8 @@ const Skills = [
   {
     image: "/react.svg",
     percentage: 70,
-    title: "React native",
-    description: "Building scalable SPAs with TypeScript.",
+    title: "React Native",
+    description: "Building mobile applications.",
     color: "#C3002F",
   },
   {
@@ -32,12 +32,11 @@ const Skills = [
     description: "Developing fast and SEO-friendly web apps.",
     color: "#000000",
   },
-
   {
     image: "/typescript.svg",
     percentage: 90,
-    title: "Typescript",
-    description: "Creating modern and responsive designs.",
+    title: "TypeScript",
+    description: "Building scalable SPAs with TypeScript.",
     color: "#3178C6",
   },
   {
@@ -50,8 +49,8 @@ const Skills = [
   {
     image: "/mobxstatetree.svg",
     percentage: 70,
-    title: "Mobx state tree",
-    description: "Developing backend services and APIs.",
+    title: "MobX State Tree",
+    description: "Alternative state management solution.",
     color: "#8CC84B",
   },
   {
@@ -61,7 +60,6 @@ const Skills = [
     description: "Creating modern and responsive designs.",
     color: "#44A8B3",
   },
-
   {
     image: "/bootstrap.svg",
     percentage: 80,
@@ -70,80 +68,115 @@ const Skills = [
     color: "#563D7C",
     className: "rounded-full",
   },
-
   {
     image: "/antdesign.svg",
     percentage: 70,
-    title: "AntD",
-    description: "Handling NoSQL databases efficiently.",
+    title: "Ant Design",
+    description: "Enterprise-class UI design language.",
     color: "#13AA52",
   },
   {
     image: "/mui.svg",
     percentage: 70,
     title: "Material UI",
-    description: "Building reactive web applications.",
+    description: "Google's Material Design components.",
     color: "#FF3E00",
   },
   {
     image: "/css.svg",
     percentage: 70,
     title: "CSS",
-    description: "Building reactive web applications.",
-    color: "#FF3E00",
+    description: "Styling web applications.",
+    color: "#2965F1",
   },
 ];
 
-const Skils = () => {
+const SkillsComponent = () => {
   return (
-    <div className="w-full h-auto flex flex-col items-center justify-center pb-20">
-      <h1 className="text-2xl font-bold text-black flex items-center justify-center pt-20  ">
-        Skills
-      </h1>
-      <div className="flex justify-center items-center">
-        <div className="w-4 h-4 bg-gray-600 rounded-[50%]" />
-        <div className="w-24 h-1 bg-orange-600" />
-        <div className="w-4 h-4 bg-gray-600 rounded-[50%]" />
+    <section className="w-full min-h-screen flex flex-col items-center justify-center px-4 py-12 md:py-20">
+      {/* Title Section */}
+      <div className="w-full max-w-6xl mx-auto text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-2xl md:text-3xl font-bold text-gray-900"
+        >
+          My Skills
+        </motion.h1>
+
+        {/* Decorative line under heading */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex justify-center items-center mt-2"
+        >
+          <div className="w-3 h-3 bg-gray-600 rounded-full" />
+          <div className="w-16 h-1 bg-orange-500 mx-2" />
+          <div className="w-3 h-3 bg-gray-600 rounded-full" />
+        </motion.div>
+        <div className="w-16 h-1 bg-gray-300 mb-10 md:mb-16 mx-auto" />
       </div>
-      <div className="w-24 h-1 bg-gray-400 mb-20" />
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 gap-x-0 place-items-center w-3/4">
-        {Skills.map((src, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: -50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.5 }}
-            transition={{ duration: 1, delay: index * 0.2 }}
-            className="relative flex flex-col items-center justify-center p-6 w-[230px] h-[130px] rounded-md
-            bg-gray-100 border-2 
-           
-            shadow-[inset_0_2px_3px_rgba(0,0,0,0.75)]"
-          >
+
+      {/* Skills Grid Container */}
+      <div className="w-full max-w-6xl mx-auto px-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          {Skills.map((skill, index) => (
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.3 }}
-              className="w-full h-full flex items-center justify-center mt-2"
+              key={index}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
+              whileHover={{
+                y: -5,
+                boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
+              }}
+              className="flex flex-col items-center justify-center p-6 w-full h-[180px]
+              bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all"
             >
-              <div className="bg-white p-4 rounded-full flex items-center justify-center">
+              {/* Skill Icon */}
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.2 }}
+                className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4
+                shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]"
+              >
                 <Image
-                  src={src.image}
-                  width={50}
-                  height={50}
-                  color="#FFA500"
-                  alt={`Skill ${index + 1}`}
-                  className="object-cover rounded-full"
+                  src={skill.image}
+                  width={40}
+                  height={40}
+                  alt={`${skill.title} icon`}
+                  className={`object-contain w-10 h-10 ${
+                    skill.className || ""
+                  }`}
+                  style={{ color: skill.color }}
+                />
+              </motion.div>
+
+              {/* Skill Title */}
+              <h2 className="text-base font-semibold text-gray-800 text-center mb-1">
+                {skill.title}
+              </h2>
+
+              {/* Percentage Bar */}
+              <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2 overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${skill.percentage}%` }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="h-full rounded-full"
+                  style={{ backgroundColor: skill.color }}
                 />
               </div>
             </motion.div>
-            <h2 className="text-base font-semibold text-black mt-2">
-              {src.title}
-            </h2>
-            {/* <p className="text-sm text-black">{src.description}</p> */}
-          </motion.div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default Skils;
+export default SkillsComponent;
