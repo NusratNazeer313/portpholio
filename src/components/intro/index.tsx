@@ -1,106 +1,239 @@
 "use client";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import Image from "next/image";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import ParticlesBackground from "@/components/background/page";
+
+const roles = [
+  "React.js Developer",
+  "Next.js Engineer",
+  "React Native Builder",
+];
+
+const stack = [
+  "React",
+  "Next.js",
+  "TypeScript",
+  "React Native",
+  "Redux",
+  "Tailwind",
+  "Node.js",
+  "MongoDB",
+];
+
+const name = "Nusrat Nazeer";
+const ease = [0.16, 1, 0.3, 1] as const;
 
 const Introduction = () => {
-  const role = "React.js, React Native, Next.js Developer";
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
   const [displayText, setDisplayText] = useState("");
+  const [roleIndex, setRoleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [index, setIndex] = useState(0);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothX = useSpring(mouseX, { stiffness: 90, damping: 22 });
+  const smoothY = useSpring(mouseY, { stiffness: 90, damping: 22 });
+  const photoX = useTransform(smoothX, [-0.5, 0.5], [-8, 8]);
+  const photoY = useTransform(smoothY, [-0.5, 0.5], [-6, 6]);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
+    setMounted(true);
+  }, []);
 
-    if (isDeleting) {
-      timeout = setTimeout(() => {
-        setDisplayText((prev) => prev.slice(0, -1));
-        if (displayText.length === 0) {
+  useEffect(() => {
+    if (!mounted) return;
+    const current = roles[roleIndex];
+    const speed = isDeleting ? 36 : 80;
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        const next = current.slice(0, displayText.length + 1);
+        setDisplayText(next);
+        if (next === current) setTimeout(() => setIsDeleting(true), 1400);
+      } else {
+        const next = current.slice(0, displayText.length - 1);
+        setDisplayText(next);
+        if (next.length === 0) {
           setIsDeleting(false);
-          setIndex(0);
+          setRoleIndex((i) => (i + 1) % roles.length);
         }
-      }, 100);
-    } else {
-      timeout = setTimeout(() => {
-        setDisplayText((prev) => role.slice(0, prev.length + 1));
-        if (displayText.length === role.length) {
-          setTimeout(() => setIsDeleting(true), 1500);
-        }
-      }, 150);
-    }
-
+      }
+    }, speed);
     return () => clearTimeout(timeout);
-  }, [displayText, isDeleting]);
+  }, [displayText, isDeleting, roleIndex, mounted]);
+
+  const onMove = (e: MouseEvent<HTMLDivElement>) => {
+    const rect = sectionRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
+    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
 
   return (
-    <div className="relative w-full min-h-screen flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 xl:gap-12 px-4 sm:px-6 lg:px-8 py-8 lg:py-0">
-      {/* Text Content Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 0 }}
-        animate={{ opacity: 1, y: 30 }}
-        transition={{ duration: 1, delay: 1 }}
-        className="w-full lg:w-1/2 max-w-2xl text-center lg:text-left order-2 lg:order-1 z-10"
-      >
-        {/* Main Greeting */}
-        <h1 className="text-black font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl leading-tight">
-          Hello! It is me
-        </h1>
+    <section
+      ref={sectionRef}
+      onMouseMove={onMove}
+      className="relative w-full min-h-[85svh] overflow-hidden atmosphere-dark grain flex flex-col"
+    >
+      {/* Decorations — must stay absolute (do not take layout space) */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <ParticlesBackground />
+        <div className="hero-grid absolute inset-0 opacity-60" />
+        <div
+          className="orb absolute top-0 left-0 w-64 h-64 rounded-full blur-3xl opacity-40"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(232,93,4,0.5) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="orb absolute bottom-0 right-0 w-72 h-72 rounded-full blur-3xl opacity-25"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(255,122,26,0.4) 0%, transparent 70%)",
+            animationDelay: "-5s",
+          }}
+        />
+      </div>
 
-        {/* Name */}
-        <h1 className="text-orange-500 font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl mt-2 leading-tight">
-          Nusrat Nazeer
-        </h1>
+      {/* Real content — taller hero, content vertically centered */}
+      <div className="atmosphere-content relative z-10 flex-1 flex items-center mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10 pt-20 lg:pt-24 pb-10">
+        <div className="flex w-full flex-col-reverse lg:flex-row items-center gap-8 lg:gap-14">
+          {/* Text */}
+          <div className="w-full lg:flex-1 text-center lg:text-left">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease }}
+              className="inline-flex items-center gap-2 text-ember-bright text-[11px] sm:text-xs tracking-[0.28em] uppercase font-medium mb-3"
+            >
+              <span className="block h-px w-7 bg-ember" />
+              Frontend Developer
+            </motion.p>
 
-        {/* Typewriter Effect */}
-        <motion.p
-          key={index}
-          className="text-black bg-clip-text text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl font-bold mt-4 min-h-[2rem] sm:min-h-[2.5rem] md:min-h-[3rem] lg:min-h-[3.5rem]"
-        >
-          {displayText}|
-        </motion.p>
+            <h1 className="font-display font-extrabold tracking-tight leading-[0.95]">
+              <motion.span
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease }}
+                className="block text-stone/50 text-xl sm:text-2xl md:text-3xl mb-2"
+              >
+                Hello, I&apos;m
+              </motion.span>
+              <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] shimmer-text">
+                {name.split("").map((char, i) => (
+                  <motion.span
+                    key={`${char}-${i}`}
+                    initial={{ opacity: 0, y: 28 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: 0.08 + i * 0.028, ease }}
+                    className="inline-block"
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </motion.span>
+                ))}
+              </span>
+            </h1>
 
-        {/* Description */}
-        <p className="text-black text-sm sm:text-base md:text-lg lg:text-base xl:text-lg mt-4 lg:mt-6 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-          Building modern, high-performance web and mobile applications with{" "}
-          <span className="hidden sm:inline lg:inline">
-            <br />
-          </span>
-          React.js, Next.js, and React Native—turning ideas into seamless
-          digital experiences.
-        </p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.45 }}
+              className="mt-4 text-base sm:text-lg md:text-xl font-medium text-stone/90 min-h-[1.75rem]"
+            >
+              {displayText}
+              <span className="cursor-blink text-ember-bright">|</span>
+            </motion.p>
 
-        {/* Download CV Button */}
-        <a href="/Nusratnazeer.pdf" download="cv">
-          <button className="mt-6 lg:mt-8 relative px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 text-white font-bold text-sm sm:text-base lg:text-lg rounded-full border-2 transition-all duration-300 ease-in-out transform bg-orange-500 hover:bg-orange-600 hover:scale-105 lg:hover:scale-110 hover:shadow-[0_0_30px_rgba(255,165,0,0.7)] sm:hover:shadow-[0_0_40px_rgba(255,165,0,0.7)] focus:outline-none focus:ring-4 focus:ring-orange-300">
-            Download CV
-          </button>
-        </a>
-      </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55, duration: 0.5, ease }}
+              className="mt-4 text-stone/55 text-sm sm:text-base max-w-md mx-auto lg:mx-0 leading-relaxed"
+            >
+              High-performance web & mobile apps with React, Next.js, and React
+              Native.
+            </motion.p>
 
-      {/* Lottie Animation Section */}
-      <div className="w-full lg:w-1/2 flex justify-center items-center order-1 lg:order-2">
-        <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.65, duration: 0.5, ease }}
+              className="mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-3"
+            >
+              <a href="/Nusratnazeer.pdf" download="cv">
+                <motion.button
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="px-6 py-3 text-ink font-semibold text-sm bg-ember hover:bg-ember-bright transition-colors"
+                >
+                  Download CV
+                </motion.button>
+              </a>
+              <motion.button
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() =>
+                  document
+                    .getElementById("projects")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+                className="px-6 py-3 text-stone font-semibold text-sm border border-stone/25 hover:border-ember hover:text-ember-bright transition-colors"
+              >
+                View work →
+              </motion.button>
+            </motion.div>
+          </div>
+
+          {/* Photo */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="relative"
+            transition={{ duration: 0.7, delay: 0.15, ease }}
+            style={{ x: photoX, y: photoY }}
+            className="relative shrink-0 w-[180px] sm:w-[220px] md:w-[260px] lg:w-[300px] aspect-[4/5]"
           >
-            <DotLottieReact
-              src="https://lottie.host/6db9bb2e-11fc-468f-bcf5-0d21d86b5ccf/xCcfIA5arb.lottie"
-              loop
-              autoplay
+            <div className="absolute -inset-2 border border-ember/30" />
+            <div className="absolute -inset-1 border border-stone/10" />
+            <div
+              className="absolute -inset-4 blur-2xl opacity-50 pointer-events-none"
               style={{
-                width: "100%",
-                height: "auto",
-                filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.1))",
+                background:
+                  "radial-gradient(circle, rgba(232,93,4,0.45) 0%, transparent 70%)",
               }}
             />
+            <div className="relative h-full w-full overflow-hidden border border-stone/10 bg-ink-soft">
+              <Image
+                src="/profile.jpeg"
+                alt="Nusrat Nazeer"
+                fill
+                priority
+                sizes="300px"
+                className="object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent" />
+            </div>
           </motion.div>
         </div>
       </div>
-    </div>
+
+      {/* Tech ticker */}
+      <div className="atmosphere-content relative z-10 mt-auto border-t border-white/5 overflow-hidden py-3 bg-ink/50">
+        <div className="marquee-track-fast flex w-max gap-8 whitespace-nowrap">
+          {[...stack, ...stack, ...stack, ...stack].map((item, i) => (
+            <span
+              key={`${item}-${i}`}
+              className="text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-stone/35 font-medium"
+            >
+              <span className="inline-block w-1 h-1 bg-ember mr-2 align-middle" />
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 

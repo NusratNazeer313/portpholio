@@ -1,10 +1,13 @@
 "use client";
+
 import React, { useState } from "react";
 import ReactPlayer from "react-player";
 import { MdClose } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
+import SectionHeading from "@/components/ui/SectionHeading";
+import ClientOnly from "@/components/ui/ClientOnly";
 
 const ReactNativeProjects = () => {
-  //   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalIndex, setModalIndex] = useState(0);
@@ -35,34 +38,26 @@ const ReactNativeProjects = () => {
       videoUrl: "/videos/journey.mp4",
     },
     {
-      id: 3,
-      title: "E-commerce App",
-      description:
-        "Mobile shopping application with product catalog, cart, and payment integration.",
-      technologies: "React Native, Stripe, Express.js",
-      videoUrl: "/videos/journey.mp4",
-    },
-    {
       id: 4,
-      title: "E-commerce App",
+      title: "Journey App",
       description:
-        "Mobile shopping application with product catalog, cart, and payment integration.",
+        "Travel companion app with itineraries and offline maps.",
       technologies: "React Native, Stripe, Express.js",
       videoUrl: "/videos/journey.mp4",
     },
     {
       id: 5,
-      title: "E-commerce App",
+      title: "Candy Store",
       description:
-        "Mobile shopping application with product catalog, cart, and payment integration.",
+        "Playful commerce experience with smooth product browsing.",
       technologies: "React Native, Stripe, Express.js",
-      videoUrl: "/videos/journey.mp4",
+      videoUrl: "/videos/candy.mp4",
     },
     {
       id: 6,
-      title: "E-commerce App",
+      title: "Mobile Shop",
       description:
-        "Mobile shopping application with product catalog, cart, and payment integration.",
+        "Catalog, cart, and checkout flow built for mobile-first shopping.",
       technologies: "React Native, Stripe, Express.js",
       videoUrl: "/videos/journey.mp4",
     },
@@ -74,119 +69,143 @@ const ReactNativeProjects = () => {
   };
 
   return (
-    <div className="w-full h-auto flex flex-col items-center justify-center pb-20">
-      <h1 className="text-2xl font-bold text-black flex items-center justify-center pt-20">
-        React Native Projects
-      </h1>
-      <div className="flex justify-center items-center">
-        <div className="w-4 h-4 bg-gray-600 rounded-[50%]" />
-        <div className="w-24 h-1 bg-orange-600" />
-        <div className="w-4 h-4 bg-gray-600 rounded-[50%]" />
-      </div>
-      <div className="w-24 h-1 bg-gray-400 mb-6" />
+    <div className="w-full flex flex-col items-center justify-center pb-8 atmosphere px-4 pt-8 md:pt-12">
+      <SectionHeading
+        title="React Native Projects"
+        subtitle="Mobile experiences with motion-rich demos — hover to preview."
+      />
 
-      <div className="w-full max-w-6xl px-4">
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="w-full max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {projects.map((project, index) => (
-            <div
+            <motion.div
               key={project.id}
-              className="relative aspect-video bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.6,
+                delay: index * 0.07,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="relative aspect-video bg-ink overflow-hidden cursor-pointer border border-ink/10 group"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => handleProjectClick(index)}
             >
-              <ReactPlayer
-                url={project.videoUrl}
-                controls
-                width="100%"
-                height="100%"
-                playing={hoveredIndex === index}
+              <ClientOnly
+                fallback={<div className="w-full h-full bg-ink" aria-hidden />}
+              >
+                <ReactPlayer
+                  url={project.videoUrl}
+                  controls={false}
+                  width="100%"
+                  height="100%"
+                  playing={hoveredIndex === index}
+                  muted
+                  loop
+                />
+              </ClientOnly>
+
+              <div
+                className={`absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent transition-opacity duration-400 ${
+                  hoveredIndex === index ? "opacity-100" : "opacity-80"
+                }`}
               />
 
-              {/* Hover Overlay */}
-              {hoveredIndex === index && (
-                <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-orange-500/90 to-transparent transition-all duration-300">
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <h3 className="font-bold text-lg">{project.title}</h3>
-                    <p className="text-sm line-clamp-2">
-                      {project.description}
-                    </p>
-                    <button className="mt-2 text-sm font-semibold underline">
-                      View Details
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-stone translate-y-1 group-hover:translate-y-0 transition-transform duration-400">
+                <h3 className="font-display font-bold text-lg">{project.title}</h3>
+                <p className="text-xs text-stone/70 mt-1 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                  {project.description}
+                </p>
+                <span className="inline-block mt-2 text-xs font-semibold text-ember-bright opacity-0 group-hover:opacity-100 transition-opacity">
+                  View details →
+                </span>
+              </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-20">
-            <div className="bg-white rounded-lg max-w-6xl w-full max-h-[100vh] overflow-hidden flex flex-col md:flex-row">
-              {/* Video Section */}
-              <div className="md:w-1/2 aspect-video bg-black">
-                <ReactPlayer
-                  url={projects[modalIndex].videoUrl}
-                  controls
-                  width="100%"
-                  height="100%"
-                  playing={true}
-                />
-              </div>
-
-              {/* Details Section */}
-              <div className="md:w-1/2 p-6 overflow-y-auto">
-                <div className="flex justify-between items-start">
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    {projects[modalIndex].title}
-                  </h2>
-                  <button
-                    onClick={() => setIsModalOpen(false)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
-                    <MdClose size={24} />
-                  </button>
+        <AnimatePresence>
+          {isModalOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-ink/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-8"
+              onClick={() => setIsModalOpen(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.92, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="bg-stone max-w-5xl w-full overflow-hidden flex flex-col md:flex-row shadow-lift"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="md:w-1/2 aspect-video bg-ink">
+                  <ReactPlayer
+                    url={projects[modalIndex].videoUrl}
+                    controls
+                    width="100%"
+                    height="100%"
+                    playing
+                  />
                 </div>
 
-                <div className="mt-4 space-y-4">
-                  <div>
-                    <h3 className="font-semibold text-gray-700">
-                      Description:
-                    </h3>
-                    <p className="text-gray-600 mt-1">
-                      {projects[modalIndex].description}
-                    </p>
+                <div className="md:w-1/2 p-6 sm:p-8 overflow-y-auto">
+                  <div className="flex justify-between items-start gap-4">
+                    <h2 className="font-display text-2xl font-bold text-ink">
+                      {projects[modalIndex].title}
+                    </h2>
+                    <button
+                      onClick={() => setIsModalOpen(false)}
+                      className="text-mist hover:text-ink transition-colors"
+                      aria-label="Close"
+                    >
+                      <MdClose size={24} />
+                    </button>
                   </div>
 
-                  <div>
-                    <h3 className="font-semibold text-gray-700">
-                      Technologies Used:
-                    </h3>
-                    <p className="text-gray-600 mt-1">
-                      {projects[modalIndex].technologies}
-                    </p>
-                  </div>
+                  <div className="mt-5 space-y-4">
+                    <div>
+                      <h3 className="text-xs tracking-widest uppercase text-ember font-semibold">
+                        Description
+                      </h3>
+                      <p className="text-ink/70 mt-1.5 text-sm leading-relaxed">
+                        {projects[modalIndex].description}
+                      </p>
+                    </div>
 
-                  <div className="flex space-x-2 mt-6">
-                    {projects.map((_, index) => (
-                      <button
-                        key={index}
-                        className={`w-3 h-3 rounded-full ${
-                          index === modalIndex ? "bg-orange-600" : "bg-gray-300"
-                        }`}
-                        onClick={() => setModalIndex(index)}
-                        aria-label={`View project ${index + 1}`}
-                      />
-                    ))}
+                    <div>
+                      <h3 className="text-xs tracking-widest uppercase text-ember font-semibold">
+                        Technologies
+                      </h3>
+                      <p className="text-ink/70 mt-1.5 text-sm">
+                        {projects[modalIndex].technologies}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mt-6">
+                      {projects.map((_, index) => (
+                        <button
+                          key={index}
+                          className={`h-1.5 transition-all duration-300 ${
+                            index === modalIndex
+                              ? "w-8 bg-ember"
+                              : "w-3 bg-ink/20 hover:bg-ink/40"
+                          }`}
+                          onClick={() => setModalIndex(index)}
+                          aria-label={`View project ${index + 1}`}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

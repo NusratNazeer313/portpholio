@@ -1,54 +1,65 @@
 "use client";
-import { useCallback } from "react";
+
+import { useCallback, useEffect, useState } from "react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine } from "tsparticles-engine";
 
 const ParticlesBackground = () => {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
   const particlesInit = useCallback(async (engine: Engine) => {
-    console.log("Particles.js Initialized");
     await loadSlim(engine);
   }, []);
 
+  if (!ready) return null;
+
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none">
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={{
-          fullScreen: { enable: false },
-          particles: {
-            number: { value: 100 },
-            color: { value: "#FFA500" },
-            shape: { type: "circle" },
-            opacity: { value: 0.5, random: true },
-            size: { value: 3, random: true },
-            links: {
-              enable: true,
-              distance: 150,
-              color: "#FFA500",
-              opacity: 0.3,
-              width: 1,
-            },
-            move: {
-              enable: true,
-              speed: 4,
-              direction: "none",
-              random: true,
-              straight: false,
-              outModes: { default: "out" },
-            },
+    <Particles
+      id="tsparticles"
+      init={particlesInit}
+      className="absolute inset-0 h-full w-full"
+      options={{
+        fullScreen: { enable: false },
+        fpsLimit: 60,
+        particles: {
+          number: { value: 40, density: { enable: true, area: 900 } },
+          color: { value: ["#e85d04", "#ff7a1a"] },
+          shape: { type: "circle" },
+          opacity: { value: { min: 0.1, max: 0.4 } },
+          size: { value: { min: 1, max: 2.5 } },
+          links: {
+            enable: true,
+            distance: 120,
+            color: "#e85d04",
+            opacity: 0.15,
+            width: 1,
           },
-          interactivity: {
-            detectsOn: "canvas",
-            events: {
-              onHover: { enable: true, mode: "repulse" },
-              onClick: { enable: true, mode: "push" },
-            },
+          move: {
+            enable: true,
+            speed: 0.7,
+            direction: "none",
+            random: true,
+            outModes: { default: "out" },
           },
-        }}
-      />
-    </div>
+        },
+        interactivity: {
+          detectsOn: "canvas",
+          events: {
+            onHover: { enable: true, mode: "grab" },
+            resize: true,
+          },
+          modes: {
+            grab: { distance: 120, links: { opacity: 0.35 } },
+          },
+        },
+        detectRetina: true,
+      }}
+    />
   );
 };
 
